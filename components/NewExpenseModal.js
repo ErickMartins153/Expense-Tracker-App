@@ -7,13 +7,19 @@ import {
   View,
 } from "react-native";
 import PressableButton from "./PressableButton";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ExpensesContext } from "../store/expenses-context";
 
-export default function NewExpenseModal({ showModal, addExpense }) {
+export default function NewExpenseModal({ showModal }) {
+  const expensesCtx = useContext(ExpensesContext);
   const [newExpense, setNewExpense] = useState("");
+  const [newValue, setNewValue] = useState(0);
 
   function handleNewExpense(text) {
     setNewExpense(text);
+  }
+  function handleNewValue(text) {
+    setNewValue(text);
   }
 
   function closeModal() {
@@ -22,8 +28,7 @@ export default function NewExpenseModal({ showModal, addExpense }) {
 
   function handleSubmitExpense() {
     if (newExpense.trim() === "") return;
-
-    addExpense(newExpense);
+    expensesCtx.addExpense(newExpense, newValue);
     closeModal();
   }
 
@@ -36,10 +41,19 @@ export default function NewExpenseModal({ showModal, addExpense }) {
         <View style={styles.outerContainer}>
           <View style={styles.innerContainer}>
             <TextInput
-              placeholder="Insert the new Expense"
+              placeholder="Insert expense name"
               style={styles.input}
               maxLength={30}
               onChangeText={handleNewExpense}
+            />
+          </View>
+          <View style={styles.innerContainer}>
+            <TextInput
+              placeholder="Insert expense value"
+              style={styles.input}
+              maxLength={30}
+              onChangeText={handleNewValue}
+              keyboardType="number-pad"
             />
           </View>
           <View style={styles.buttonsContainer}>
