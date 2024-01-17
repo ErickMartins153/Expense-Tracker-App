@@ -2,22 +2,41 @@ import { StatusBar } from "expo-status-bar";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import RecentExpensesScreen from "./screens/RecentExpensesScreen";
-import { Button, StyleSheet, View } from "react-native";
+import { Button, Modal, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AllExpensesScreen from "./screens/AllExpensesScreen";
+import { useState } from "react";
+import NewExpenseModal from "./components/NewExpenseModal";
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const [showModal, setShowModal] = useState(false);
+  const [expenses, setExpenses] = useState([]);
+
+  function handleModal(state) {
+    setShowModal(state);
+  }
+
+  function handleNewExpense(expense) {
+    setExpenses((prevExpenses) => [expense, ...prevExpenses]);
+  }
+
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style="light" hidden={true} />
       <NavigationContainer>
+        {showModal && (
+          <NewExpenseModal
+            showModal={handleModal}
+            addExpense={handleNewExpense}
+          />
+        )}
         <Tab.Navigator
           screenOptions={{
-            headerStyle: { backgroundColor: "#280191" },
+            headerStyle: { backgroundColor: "#3700cf" },
             headerTintColor: "#e7e7e7",
-            tabBarStyle: { backgroundColor: "#280191" },
+            tabBarStyle: { backgroundColor: "#3700cf" },
             tabBarActiveTintColor: "#e7e7e7",
             tabBarActiveBackgroundColor: "#4201f3",
             tabBarInactiveTintColor: "#afafaf",
@@ -27,6 +46,7 @@ export default function App() {
                 color={tintColor}
                 size={24}
                 style={styles.headerButton}
+                onPress={() => handleModal(true)}
               />
             ),
           }}
@@ -56,7 +76,6 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  rootContainer: { backgroundColor: "#240677" },
   headerButton: {
     marginRight: 24,
     marginVertical: "auto",
