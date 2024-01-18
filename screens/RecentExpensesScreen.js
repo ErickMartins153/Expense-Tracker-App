@@ -17,7 +17,7 @@ export default function RecentExpensesScreen() {
   const expensesCtx = useContext(ExpensesContext);
   const recentExpenses = expensesCtx.recentExpenses;
 
-  function handleShowModal(state, expenseObj = null) {
+  function handleShowModal(state, expenseObj) {
     setShowModal(state);
     setCurrentExpense({ ...expenseObj });
   }

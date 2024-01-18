@@ -69,29 +69,42 @@ export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
               value={data.expense}
               style={styles.input}
               maxLength={30}
+              editable={allowEdit}
             />
-            <Text style={styles.inputText}>Expense value</Text>
+            <Text style={styles.inputText}>Expense unitary value </Text>
             <TextInput
               placeholder="Set a expense value"
-              value={data.value}
+              value={"$ " + data.value}
               style={styles.input}
               maxLength={30}
+              editable={allowEdit}
             />
           </View>
           <View style={styles.buttonsContainer}>
-            <View style={styles.iconButtons}>
-              <Ionicons
-                name="remove"
-                size={24}
-                onPress={() => handleQuantity("subtract")}
-              />
-              <Text style={styles.quantity}>{quantity}</Text>
-              <Ionicons
-                name="add"
-                size={24}
-                onPress={() => handleQuantity("sum")}
-              />
-            </View>
+            {allowEdit && (
+              <View style={styles.iconButtons}>
+                <View style={styles.icon}>
+                  <Ionicons
+                    name="remove"
+                    size={24}
+                    color={"white"}
+                    onPress={() => handleQuantity("subtract")}
+                  />
+                </View>
+                <View style={styles.quantityContainer}>
+                  <Text>quantity</Text>
+                  <Text style={styles.quantity}>{quantity}</Text>
+                </View>
+                <View style={styles.icon}>
+                  <Ionicons
+                    name="add"
+                    size={24}
+                    color={"white"}
+                    onPress={() => handleQuantity("sum")}
+                  />
+                </View>
+              </View>
+            )}
             <View style={styles.regularButtons}>
               <PressableButton onPress={closeModal}>Close</PressableButton>
               {allowEdit && (
@@ -161,15 +174,28 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     flex: 1,
-    paddingVertical: 16,
+    paddingVertical: 8,
   },
   iconButtons: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     marginBottom: 16,
   },
+  icon: {
+    paddingVertical: 8,
+    paddingHorizontal: 32,
+    borderWidth: 1,
+    borderRadius: 16,
+    backgroundColor: "#3700cf",
+  },
+  quantityContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   quantity: {
+    marginTop: 4,
     borderBottomWidth: 1,
+    fontSize: 18,
   },
   regularButtons: {
     flexDirection: "row",

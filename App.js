@@ -50,6 +50,7 @@ export default function App() {
                 tabBarIcon: ({ color, size }) => (
                   <Ionicons name="hourglass" color={color} size={size} />
                 ),
+                title: "Recent Expenses",
               }}
             />
             <Tab.Screen
@@ -59,6 +60,7 @@ export default function App() {
                 tabBarIcon: ({ color, size }) => (
                   <Ionicons name="calendar" color={color} size={size} />
                 ),
+                title: "All time Expenses",
               }}
             />
           </Tab.Navigator>

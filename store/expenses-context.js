@@ -52,6 +52,20 @@ export default function ExpensesContextProvider({ children }) {
         }
       })
     );
+    setRecentExpenses((prevExpenses) =>
+      prevExpenses.map((obj) => {
+        if (obj["expense"] === expenseName) {
+          return {
+            ...obj,
+            expense: expenseName,
+            quantity: newQuantity !== undefined ? newQuantity : obj.quantity,
+            value: newValue !== undefined ? newValue : obj.value,
+          };
+        } else {
+          return obj;
+        }
+      })
+    );
   }
 
   const value = {

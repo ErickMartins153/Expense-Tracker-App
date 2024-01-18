@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function Header({ children, expenses }) {
   const totalValue = expenses.reduce((sum, obj) => {
     const checkedNumber = obj.value.replace(",", ".");
-    return sum + parseFloat(checkedNumber);
+    return sum + parseFloat(checkedNumber) * obj.quantity;
   }, 0);
   return (
     <View style={styles.rootContainer}>
