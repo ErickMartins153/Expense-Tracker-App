@@ -25,7 +25,9 @@ export default function ExpenseList({ data, customStyle, selectExpense }) {
                 <Text>{item.expense}</Text>
                 <Text>data</Text>
               </View>
-              <Text>$ {item.value}</Text>
+              <View style={styles.contentContainer}>
+                <Text>$ {item.value}</Text>
+              </View>
             </Pressable>
           );
         }}
@@ -37,7 +39,6 @@ export default function ExpenseList({ data, customStyle, selectExpense }) {
 const styles = StyleSheet.create({
   rootContainer: {},
   outerContainer: {
-    padding: 4,
     margin: 8,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -47,7 +48,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   contentContainer: {
-    margin: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
     justifyContent: "space-evenly",
   },
   pressed: {
