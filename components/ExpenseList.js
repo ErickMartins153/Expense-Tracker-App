@@ -29,7 +29,9 @@ export default function ExpenseList({ data, customStyle, selectExpense }) {
                 <Text style={styles.text}>{item.expense}</Text>
               </View>
               <View style={styles.contentContainer}>
-                <Text style={[styles.text, styles.value]}>$ {item.value}</Text>
+                <Text style={[styles.text, styles.value]}>
+                  $ {item.value * item.quantity}
+                </Text>
               </View>
             </Pressable>
           );

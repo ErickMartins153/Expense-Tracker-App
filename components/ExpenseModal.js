@@ -45,6 +45,11 @@ export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
     );
   }
 
+  function handleFinishExpense() {
+    expensesCtx.finishExpense(data.expense);
+    closeModal();
+  }
+
   function handleQuantity(operation) {
     if (operation === "sum") {
       setQuantity((prevQuantity) => prevQuantity + 1);
@@ -112,6 +117,15 @@ export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
                   Update quantity
                 </PressableButton>
               )}
+            </View>
+            <View style={styles.doneContainer}>
+              <PressableButton
+                extraStyle={{ backgroundColor: "green" }}
+                rippleStyle={{ color: "#00ca00" }}
+                onPress={handleFinishExpense}
+              >
+                Done
+              </PressableButton>
             </View>
             <View style={styles.deleteContainer}>
               <PressableButton
@@ -206,6 +220,11 @@ const styles = StyleSheet.create({
   deleteContainer: {
     flex: 1,
     justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  doneContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
   },
   deleteButton: {

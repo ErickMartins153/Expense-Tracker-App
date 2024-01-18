@@ -72,7 +72,8 @@ export default function App() {
 
 const styles = StyleSheet.create({
   headerButton: {
-    marginRight: 24,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
     marginVertical: "auto",
   },
 });
