@@ -1,24 +1,65 @@
-import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Modal, StyleSheet, Text, TextInput, View } from "react-native";
 import PressableButton from "./PressableButton";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ExpensesContext } from "../store/expenses-context";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
+  const [quantity, setQuantity] = useState(1);
   const expensesCtx = useContext(ExpensesContext);
+  const expenses = expensesCtx.expenses;
+
+  useEffect(() => {
+    const currentExpense =
+      expenses.find((obj) => obj["expense"] === data["expense"])?.quantity ?? 1;
+    setQuantity(currentExpense);
+  }, [data]);
+
   function closeModal() {
     showModal(false);
   }
 
   function handleUpdateExpense() {
-    expensesCtx.updateExpense(data.expense);
+    expensesCtx.updateExpense(data.expense, quantity);
     closeModal();
+  }
+
+  function deleteExpense() {
+    expensesCtx.deleteExpense(data.expense);
+    closeModal();
+  }
+
+  function handleDeleteExpense() {
+    Alert.alert(
+      "Are you sure?",
+      `Are you sure you want to delete "${data.expense}?"`,
+      [
+        { text: "No", style: "cancel" },
+        {
+          text: "Yes",
+          style: "destructive",
+          onPress: deleteExpense,
+        },
+      ],
+      { cancelable: true }
+    );
+  }
+
+  function handleQuantity(operation) {
+    if (operation === "sum") {
+      setQuantity((prevQuantity) => prevQuantity + 1);
+    } else {
+      setQuantity((prevQuantity) => prevQuantity - 1);
+    }
   }
 
   return (
     <Modal visible={visible} animationType="slide">
       <View style={styles.rootContainer}>
         <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>Update Expense</Text>
+          <Text style={styles.titleText}>
+            {allowEdit ? "Update Expense" : "Expense"}
+          </Text>
         </View>
         <View style={styles.outerContainer}>
           <View style={styles.innerContainer}>
@@ -38,12 +79,35 @@ export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
             />
           </View>
           <View style={styles.buttonsContainer}>
-            <PressableButton onPress={closeModal}>Close Modal</PressableButton>
-            {allowEdit && (
-              <PressableButton onPress={handleUpdateExpense}>
-                Update Expense
+            <View style={styles.iconButtons}>
+              <Ionicons
+                name="remove"
+                size={24}
+                onPress={() => handleQuantity("subtract")}
+              />
+              <Text style={styles.quantity}>{quantity}</Text>
+              <Ionicons
+                name="add"
+                size={24}
+                onPress={() => handleQuantity("sum")}
+              />
+            </View>
+            <View style={styles.regularButtons}>
+              <PressableButton onPress={closeModal}>Close</PressableButton>
+              {allowEdit && (
+                <PressableButton onPress={handleUpdateExpense}>
+                  Update quantity
+                </PressableButton>
+              )}
+            </View>
+            <View style={styles.deleteContainer}>
+              <PressableButton
+                onPress={handleDeleteExpense}
+                extraStyle={styles.deleteButton}
+              >
+                Delete Expense
               </PressableButton>
-            )}
+            </View>
           </View>
         </View>
       </View>
@@ -96,9 +160,29 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   buttonsContainer: {
+    flex: 1,
+    paddingVertical: 16,
+  },
+  iconButtons: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginBottom: 16,
+  },
+  quantity: {
+    borderBottomWidth: 1,
+  },
+  regularButtons: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
     marginVertical: 16,
+  },
+  deleteContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  deleteButton: {
+    backgroundColor: "red",
   },
 });
