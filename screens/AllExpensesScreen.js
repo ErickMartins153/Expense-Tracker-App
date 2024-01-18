@@ -10,13 +10,14 @@ export default function AllExpensesScreen() {
   const [showModal, setShowModal] = useState(false);
   const [currentExpense, setCurrentExpense] = useState({
     expense: "",
+    quantity: 1,
     value: "",
   });
 
   const expensesCtx = useContext(ExpensesContext);
   const expenses = expensesCtx.expenses;
 
-  function handleShowModal(state, expenseObj = null) {
+  function handleShowModal(state, expenseObj) {
     setShowModal(state);
     setCurrentExpense({ ...expenseObj });
   }

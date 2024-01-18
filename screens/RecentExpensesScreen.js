@@ -11,6 +11,7 @@ export default function RecentExpensesScreen() {
   const [currentExpense, setCurrentExpense] = useState({
     expense: "",
     value: "",
+    quantity: 1,
   });
 
   const expensesCtx = useContext(ExpensesContext);

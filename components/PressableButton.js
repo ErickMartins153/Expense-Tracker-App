@@ -1,8 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-export default function PressableButton({ children, onPress }) {
+export default function PressableButton({ children, onPress, extraStyle }) {
   return (
-    <View style={styles.outerContainer}>
+    <View style={[styles.outerContainer, extraStyle]}>
       <Pressable
         onPress={onPress}
         android_ripple={{ color: "#4300fc" }}

@@ -4,8 +4,9 @@ export const ExpensesContext = createContext({
   expenses: {},
   recentExpenses: {},
   addExpense: (expenseName, expenseValue) => {},
-  updateExpense: (expenseName) => {},
+  finishExpense: (expenseName) => {},
   deleteExpense: (expenseName) => {},
+  updateExpense: (expenseName, newQuantity, newValue) => {},
 });
 
 export default function ExpensesContextProvider({ children }) {
@@ -14,16 +15,16 @@ export default function ExpensesContextProvider({ children }) {
 
   function addExpense(expense, value) {
     setExpenses((prevExpenses) => [
-      { expense: expense, value: value },
+      { expense: expense, value: value, quantity: 1 },
       ...prevExpenses,
     ]);
     setRecentExpenses((prevExpenses) => [
-      { expense: expense, value: value },
+      { expense: expense, value: value, quantity: 1 },
       ...prevExpenses,
     ]);
   }
 
-  function updateExpense(expenseName) {
+  function finishExpense(expenseName) {
     setRecentExpenses((prevExpenses) =>
       prevExpenses.filter(({ expense }) => expense !== expenseName)
     );
@@ -33,15 +34,33 @@ export default function ExpensesContextProvider({ children }) {
     setExpenses((prevExpenses) =>
       prevExpenses.filter(({ expense }) => expense !== expenseName)
     );
-    updateExpense(expenseName);
+    finishExpense(expenseName);
+  }
+
+  function updateExpense(expenseName, newQuantity, newValue) {
+    setExpenses((prevExpenses) =>
+      prevExpenses.map((obj) => {
+        if (obj["expense"] === expenseName) {
+          return {
+            ...obj,
+            expense: expenseName,
+            quantity: newQuantity !== undefined ? newQuantity : obj.quantity,
+            value: newValue !== undefined ? newValue : obj.value,
+          };
+        } else {
+          return obj;
+        }
+      })
+    );
   }
 
   const value = {
     expenses: expenses,
     recentExpenses: recentExpenses,
     addExpense: addExpense,
-    updateExpense: updateExpense,
+    finishExpense: finishExpense,
     deleteExpense: deleteExpense,
+    updateExpense: updateExpense,
   };
 
   return (
