@@ -3,7 +3,7 @@ import PressableButton from "./PressableButton";
 import { useContext } from "react";
 import { ExpensesContext } from "../store/expenses-context";
 
-export default function ExpenseModal({ visible, data, showModal }) {
+export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
   const expensesCtx = useContext(ExpensesContext);
   function closeModal() {
     showModal(false);
@@ -39,9 +39,11 @@ export default function ExpenseModal({ visible, data, showModal }) {
           </View>
           <View style={styles.buttonsContainer}>
             <PressableButton onPress={closeModal}>Close Modal</PressableButton>
-            <PressableButton onPress={handleUpdateExpense}>
-              Update Expense
-            </PressableButton>
+            {allowEdit && (
+              <PressableButton onPress={handleUpdateExpense}>
+                Update Expense
+              </PressableButton>
+            )}
           </View>
         </View>
       </View>

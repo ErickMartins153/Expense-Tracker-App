@@ -27,6 +27,7 @@ export default function RecentExpensesScreen() {
         visible={showModal}
         data={currentExpense}
         showModal={handleShowModal}
+        allowEdit={true}
       />
       <Header expenses={recentExpenses}>Last 7 days</Header>
       {recentExpenses.length > 0 ? (

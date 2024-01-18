@@ -27,6 +27,7 @@ export default function AllExpensesScreen() {
         visible={showModal}
         data={currentExpense}
         showModal={handleShowModal}
+        allowEdit={false}
       />
       <Header expenses={expenses}>All time expenses</Header>
       {expenses.length > 0 ? (
