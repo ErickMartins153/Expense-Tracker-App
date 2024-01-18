@@ -1,58 +1,46 @@
 import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
 import PressableButton from "./PressableButton";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { ExpensesContext } from "../store/expenses-context";
 
-export default function NewExpenseModal({ showModal }) {
+export default function ExpenseModal({ visible, data, showModal }) {
   const expensesCtx = useContext(ExpensesContext);
-  const [newExpense, setNewExpense] = useState("");
-  const [newValue, setNewValue] = useState(0);
-
-  function handleNewExpense(text) {
-    setNewExpense(text);
-  }
-  function handleNewValue(text) {
-    setNewValue(text);
-  }
-
   function closeModal() {
     showModal(false);
   }
 
-  function handleSubmitExpense() {
-    if (newExpense.trim() === "") return;
-    expensesCtx.addExpense(newExpense, newValue);
+  function handleUpdateExpense() {
+    expensesCtx.updateExpense(data.expense);
     closeModal();
   }
 
   return (
-    <Modal transparent={true} animationType="slide">
+    <Modal visible={visible} animationType="slide">
       <View style={styles.rootContainer}>
         <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>Title</Text>
+          <Text style={styles.titleText}>Update Expense</Text>
         </View>
         <View style={styles.outerContainer}>
           <View style={styles.innerContainer}>
+            <Text style={styles.inputText}>Expense name</Text>
             <TextInput
-              placeholder="Insert expense name"
+              placeholder="Set a expense name"
+              value={data.expense}
               style={styles.input}
               maxLength={30}
-              onChangeText={handleNewExpense}
             />
-          </View>
-          <View style={styles.innerContainer}>
+            <Text style={styles.inputText}>Expense value</Text>
             <TextInput
-              placeholder="Insert expense value"
+              placeholder="Set a expense value"
+              value={data.value}
               style={styles.input}
               maxLength={30}
-              onChangeText={handleNewValue}
-              keyboardType="number-pad"
             />
           </View>
           <View style={styles.buttonsContainer}>
             <PressableButton onPress={closeModal}>Close Modal</PressableButton>
-            <PressableButton onPress={handleSubmitExpense}>
-              Save Expense
+            <PressableButton onPress={handleUpdateExpense}>
+              Update Expense
             </PressableButton>
           </View>
         </View>
@@ -89,6 +77,10 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: "center",
   },
+  inputText: {
+    marginVertical: 16,
+    fontSize: 16,
+  },
   titleContainer: {
     backgroundColor: "#3700cf",
     padding: 8,
@@ -105,5 +97,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
+    marginVertical: 16,
   },
 });
