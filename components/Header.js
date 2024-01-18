@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 
 export default function Header({ children, expenses }) {
-  const totalValue = expenses.reduce(
-    (sum, obj) => sum + parseInt(obj.value),
-    0
-  );
+  const totalValue = expenses.reduce((sum, obj) => {
+    const checkedNumber = obj.value.replace(",", ".");
+    return sum + parseFloat(checkedNumber);
+  }, 0);
   return (
     <View style={styles.rootContainer}>
       <View style={styles.textContainer}>
