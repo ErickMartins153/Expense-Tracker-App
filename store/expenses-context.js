@@ -6,7 +6,7 @@ export const ExpensesContext = createContext({
   addExpense: (expenseName, expenseValue) => {},
   finishExpense: (expenseName) => {},
   deleteExpense: (expenseName) => {},
-  updateExpense: (expenseName, newQuantity, newValue) => {},
+  updateExpense: (expenseName, newName, newQuantity, newValue) => {},
 });
 
 export default function ExpensesContextProvider({ children }) {
@@ -37,7 +37,7 @@ export default function ExpensesContextProvider({ children }) {
     finishExpense(expenseName);
   }
 
-  function updateExpense(expenseName, newQuantity, newValue) {
+  function updateExpense(expenseName, newName, newQuantity, newValue) {
     setExpenses((prevExpenses) =>
       prevExpenses.map((obj) => {
         if (obj["expense"] === expenseName) {
@@ -57,9 +57,9 @@ export default function ExpensesContextProvider({ children }) {
         if (obj["expense"] === expenseName) {
           return {
             ...obj,
-            expense: expenseName,
-            quantity: newQuantity !== undefined ? newQuantity : obj.quantity,
-            value: newValue !== undefined ? newValue : obj.value,
+            expense: newName ?? obj.expense,
+            quantity: newQuantity ?? obj.quantity,
+            value: newValue ?? obj.value,
           };
         } else {
           return obj;

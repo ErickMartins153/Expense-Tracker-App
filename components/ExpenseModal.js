@@ -6,13 +6,18 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
   const [quantity, setQuantity] = useState(1);
+  const [expense, setExpense] = useState();
+  const [value, setValue] = useState();
   const expensesCtx = useContext(ExpensesContext);
   const expenses = expensesCtx.expenses;
 
   useEffect(() => {
-    const currentExpense =
-      expenses.find((obj) => obj["expense"] === data["expense"])?.quantity ?? 1;
-    setQuantity(currentExpense);
+    const currentExpense = expenses.find(
+      (obj) => obj["expense"] === data["expense"]
+    ) ?? { quantity, expense, value };
+    setQuantity(currentExpense.quantity);
+    setExpense(currentExpense.expense);
+    setValue(currentExpense.value);
   }, [data]);
 
   function closeModal() {
@@ -20,7 +25,7 @@ export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
   }
 
   function handleUpdateExpense() {
-    expensesCtx.updateExpense(data.expense, quantity);
+    expensesCtx.updateExpense(data.expense, expense, quantity, value);
     closeModal();
   }
 
@@ -58,6 +63,14 @@ export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
     }
   }
 
+  function handleName(newName) {
+    setExpense(newName);
+  }
+
+  function handleValue(newValue) {
+    setValue(newValue);
+  }
+
   return (
     <Modal visible={visible} animationType="slide">
       <View style={styles.rootContainer}>
@@ -71,18 +84,21 @@ export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
             <Text style={styles.inputText}>Expense name</Text>
             <TextInput
               placeholder="Set a expense name"
-              value={data.expense}
+              value={expense}
               style={styles.input}
               maxLength={30}
               editable={allowEdit}
+              onChangeText={handleName}
             />
             <Text style={styles.inputText}>Expense unitary value </Text>
             <TextInput
               placeholder="Set a expense value"
-              value={"$ " + data.value}
+              value={value}
               style={styles.input}
+              keyboardType="number-pad"
               maxLength={30}
               editable={allowEdit}
+              onChangeText={handleValue}
             />
           </View>
           <View style={styles.buttonsContainer}>
@@ -114,7 +130,7 @@ export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
               <PressableButton onPress={closeModal}>Close</PressableButton>
               {allowEdit && (
                 <PressableButton onPress={handleUpdateExpense}>
-                  Update quantity
+                  Update
                 </PressableButton>
               )}
             </View>
