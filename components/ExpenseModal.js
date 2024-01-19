@@ -1,8 +1,18 @@
-import { Alert, Modal, StyleSheet, Text, TextInput, View } from "react-native";
-import PressableButton from "./PressableButton";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { ExpensesContext } from "../store/expenses-context";
 import { Ionicons } from "@expo/vector-icons";
+
+import PressableButton from "./PressableButton";
 
 export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
   const [quantity, setQuantity] = useState(1);
@@ -73,87 +83,92 @@ export default function ExpenseModal({ visible, data, showModal, allowEdit }) {
 
   return (
     <Modal visible={visible} animationType="slide">
-      <View style={styles.rootContainer}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>
-            {allowEdit ? "Update Expense" : "Expense"}
-          </Text>
-        </View>
-        <View style={styles.outerContainer}>
-          <View style={styles.innerContainer}>
-            <Text style={styles.inputText}>Expense name</Text>
-            <TextInput
-              placeholder="Set a expense name"
-              value={expense}
-              style={styles.input}
-              maxLength={30}
-              editable={allowEdit}
-              onChangeText={handleName}
-            />
-            <Text style={styles.inputText}>Expense unitary value </Text>
-            <TextInput
-              placeholder="Set a expense value"
-              value={value}
-              style={styles.input}
-              keyboardType="number-pad"
-              maxLength={30}
-              editable={allowEdit}
-              onChangeText={handleValue}
-            />
+      <KeyboardAvoidingView style={styles.rootContainer} behavior="height">
+        <ScrollView>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>
+              {allowEdit ? "Update Expense" : "Expense"}
+            </Text>
           </View>
-          <View style={styles.buttonsContainer}>
-            {allowEdit && (
-              <View style={styles.iconButtons}>
-                <View style={styles.icon}>
-                  <Ionicons
-                    name="remove"
-                    size={24}
-                    color={"white"}
-                    onPress={() => handleQuantity("subtract")}
-                  />
-                </View>
-                <View style={styles.quantityContainer}>
-                  <Text>quantity</Text>
-                  <Text style={styles.quantity}>{quantity}</Text>
-                </View>
-                <View style={styles.icon}>
-                  <Ionicons
-                    name="add"
-                    size={24}
-                    color={"white"}
-                    onPress={() => handleQuantity("sum")}
-                  />
-                </View>
-              </View>
-            )}
-            <View style={styles.regularButtons}>
-              <PressableButton onPress={closeModal}>Close</PressableButton>
+          <View style={styles.outerContainer}>
+            <View style={styles.innerContainer}>
+              <Text style={styles.inputText}>Expense name</Text>
+              <TextInput
+                placeholder="Set a expense name"
+                value={expense}
+                style={styles.input}
+                maxLength={30}
+                editable={allowEdit}
+                onChangeText={handleName}
+              />
+              <Text style={styles.inputText}>Expense unitary value </Text>
+              <TextInput
+                placeholder="Set a expense value"
+                value={value}
+                style={styles.input}
+                keyboardType="number-pad"
+                maxLength={30}
+                editable={allowEdit}
+                onChangeText={handleValue}
+              />
+            </View>
+            <View style={styles.buttonsContainer}>
               {allowEdit && (
-                <PressableButton onPress={handleUpdateExpense}>
-                  Update
-                </PressableButton>
+                <View style={styles.iconButtons}>
+                  <View style={styles.icon}>
+                    <Ionicons
+                      name="remove"
+                      size={24}
+                      color={"white"}
+                      onPress={() => handleQuantity("subtract")}
+                    />
+                  </View>
+                  <View style={styles.quantityContainer}>
+                    <Text>quantity</Text>
+                    <Text style={styles.quantity}>{quantity}</Text>
+                  </View>
+                  <View style={styles.icon}>
+                    <Ionicons
+                      name="add"
+                      size={24}
+                      color={"white"}
+                      onPress={() => handleQuantity("sum")}
+                    />
+                  </View>
+                </View>
               )}
-            </View>
-            <View style={styles.doneContainer}>
-              <PressableButton
-                extraStyle={{ backgroundColor: "green" }}
-                rippleStyle={{ color: "#00ca00" }}
-                onPress={handleFinishExpense}
-              >
-                Done
-              </PressableButton>
-            </View>
-            <View style={styles.deleteContainer}>
-              <PressableButton
-                onPress={handleDeleteExpense}
-                extraStyle={styles.deleteButton}
-              >
-                Delete Expense
-              </PressableButton>
+              <View style={styles.regularButtons}>
+                <PressableButton onPress={closeModal}>Close</PressableButton>
+                {allowEdit && (
+                  <PressableButton onPress={handleUpdateExpense}>
+                    Update
+                  </PressableButton>
+                )}
+              </View>
+              {allowEdit && (
+                <View style={styles.doneContainer}>
+                  <PressableButton
+                    extraStyle={{ backgroundColor: "green" }}
+                    rippleStyle={{ color: "#00ca00" }}
+                    onPress={handleFinishExpense}
+                  >
+                    Done
+                  </PressableButton>
+                </View>
+              )}
+              <View style={styles.deleteContainer}>
+                <PressableButton
+                  onPress={handleDeleteExpense}
+                  extraStyle={styles.deleteButton}
+                  rippleStyle={{ color: "#ff2222" }}
+                >
+                  Delete Expense
+                </PressableButton>
+              </View>
             </View>
           </View>
-        </View>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
@@ -162,14 +177,14 @@ const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
     backgroundColor: "#1d006e",
-    marginTop: 16,
     borderTopStartRadius: 16,
     borderTopEndRadius: 16,
   },
   outerContainer: {
     flex: 1,
+    marginVertical: 16,
     width: "90%",
-    height: "90%",
+    height: 650,
     marginHorizontal: "5%",
     backgroundColor: "#e7e7e7",
     borderRadius: 8,
@@ -244,6 +259,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   deleteButton: {
-    backgroundColor: "red",
+    backgroundColor: "#cc0000",
   },
 });

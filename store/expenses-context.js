@@ -43,9 +43,9 @@ export default function ExpensesContextProvider({ children }) {
         if (obj["expense"] === expenseName) {
           return {
             ...obj,
-            expense: expenseName,
-            quantity: newQuantity !== undefined ? newQuantity : obj.quantity,
-            value: newValue !== undefined ? newValue : obj.value,
+            expense: newName ?? obj.expense,
+            quantity: newQuantity ?? obj.quantity,
+            value: newValue ?? obj.value,
           };
         } else {
           return obj;
